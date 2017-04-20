@@ -1,5 +1,5 @@
 motor_end_height=44;
-idler_end_height=28;
+idler_end_height=35;
 carriage_height=24;
 platform_thickness=8;
 bed_thickness=12;

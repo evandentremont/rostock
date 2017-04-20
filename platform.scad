@@ -3,7 +3,7 @@ use <carriage.scad>
 
 h=platform_thickness;
 
-cutout = 12.5;
+cutout = 8;
 inset = 6;
 
 module platform() {

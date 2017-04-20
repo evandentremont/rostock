@@ -4,7 +4,7 @@ width = 76;
 height = carriage_height;
 
 offset = 25;
-cutout = 13;
+cutout = 8;
 middle = 2*offset - width/2;
 
 module parallel_joints(reinforced) {
@@ -28,9 +28,10 @@ module parallel_joints(reinforced) {
         cylinder(r=cutout/2, h=100, center=true, $fn=24);
       translate([x, -4.5, 0])
         cube([cutout, 20, 100], center=true);
-      translate([x, 0, 0]) rotate([0, 90, 0]) rotate([0, 0, 30])
-        cylinder(r=3.3, h=17, center=true, $fn=6);
-    }
+      translate([0, 0, 0]) rotate([0, 90, 0]) rotate([0, 0, 30])
+         cylinder(r=3.3, h=offset + 2, center=true, $fn=6);
+       
+     }
     translate([0, 2, 0]) cylinder(r=middle, h=100, center=true);
     translate([0, -8, 0]) cube([2*middle, 20, 100], center=true);
   }
@@ -76,7 +77,7 @@ module carriage() {
         translate([0, -5.6, 0])
           cube([50, 5, height], center=true);
         translate([0, -carriage_hinge_offset, -height/2+4])
-          parallel_joints(16);
+          parallel_joints(18);
       }
       // Screw hole for adjustable top endstop.
       translate([15, -16, -height/2+4])
@@ -96,5 +97,5 @@ module carriage() {
 carriage();
 
 // Uncomment the following lines to check endstop alignment.
-// use <idler_end.scad>;
+ //use <idler_end.scad>;
 // translate([0, 0, -20]) rotate([180, 0, 0]) idler_end();
