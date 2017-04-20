@@ -19,9 +19,9 @@ module platform() {
           translate([0, 45, 0]) cylinder(r=5, h=h, center=true);
         }
       }
-      cylinder(r=30, h=h, center=true);
+      cylinder(r=30, h=h, center=true, $fn=12);
     }
-    cylinder(r=20, h=h+12, center=true);
+    cylinder(r=20, h=h+12, center=true, $fn=12);
     for (a = [0:2]) {
       rotate(a*120) {
         translate([0, -25, 0])
