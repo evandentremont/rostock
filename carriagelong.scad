@@ -1,10 +1,10 @@
 include <configuration.scad>
 
 width = 76;
-height = carriage_height;
+height = carriage_height*4;
 
 offset = 25;
-cutout = 7.9;
+cutout = 8;
 middle = 2*offset - width/2;
 
 module parallel_joints(reinforced) {
@@ -69,7 +69,7 @@ module carriage() {
   translate([0, 0, height/2]) 
   union() {
     for (x = [-30, 30]) {
-      translate([x, 0, 0]) lm8uu_mount(d=15, h=24);
+      translate([x, 0, 0]) lm8uu_mount(d=15, h=height);
     }
     belt_mount();
     difference() {
@@ -77,7 +77,7 @@ module carriage() {
         translate([0, -5.6, 0])
           cube([50, 5, height], center=true);
         translate([0, -carriage_hinge_offset, -height/2+4])
-          parallel_joints(17);
+          parallel_joints(29.5);
       }
       // Screw hole for adjustable top endstop.
       translate([15, -16, -height/2+4])
@@ -86,9 +86,9 @@ module carriage() {
         translate([x, 0, 0])
           cylinder(r=8, h=height+1, center=true);
         // Zip tie tunnels.
-        for (z = [-height/2+4, height/2-4])
-          translate([x, 0, z])
-            cylinder(r=13, h=3, center=true);
+       // for (z = [-height/2+4, height/2-4])
+        //  translate([x, 0, z])
+         //   cylinder(r=13, h=3, center=true);
       }
     }
   }

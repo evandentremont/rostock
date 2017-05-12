@@ -19,21 +19,25 @@ module idler_end() {
       bracket(h);
       translate([0, 7.5, 0]) rotate([90 - tilt, 0, 0]) bearing_mount();
       // Micro switch placeholder.
-      % translate([x, y, -h/2+4]) rotate([0, 0, 15])
-          cube([19.6, 6.34, 10.2], center=true);
+    //  # translate([x+4, y+2, -h/2+4]) rotate([0, 0, 15])
+       // #  cube([35, 8, 10.2], center=true);
       difference() {
         translate([20, 11.88, -h/2+5])
-          cube([18, 8, 10], center=true);
-        translate([x, y, -h/2+4]) rotate([0, 0, 15])
-          cube([30, 6.34, 20], center=true);
+          cube([30, 12, 10], center=true);
+        translate([x-1, y+2, -h/2+4]) rotate([0, 0, 015])
+          cube([50, 9, 20], center=true);
         translate([30, 12, -h/2+5])
           cylinder(r=3, h=20, center=true);
       }
     }
-    translate([x, y, -h/2+6]) rotate([0, 0, 15]) {
-      translate([-9.5/2, 0, 0]) rotate([90, 0, 0])
+    translate([x+4, y, -h/2+6]) rotate([0, 0, 15]) {
+      translate([-10, 0, 0]) rotate([90, 0, 0])
 	cylinder(r=1.1, h=26, center=true, $fn=12);
-      translate([9.5/2, 0, 0]) rotate([90, 0, 0])
+        
+    translate([-1, 0, 0]) rotate([90, 0, 0])
+	cylinder(r=1.1, h=26, center=true, $fn=12);
+        
+      translate([10, 0, 0]) rotate([90, 0, 0])
 	cylinder(r=1.1, h=26, center=true, $fn=12);
     }
     translate([0, 8, 0]) rotate([90 - tilt, 0, 0])

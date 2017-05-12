@@ -3,7 +3,7 @@ use <carriage.scad>
 
 h=platform_thickness;
 
-cutout = 8;
+cutout = 8.3;
 inset = 6;
 
 module platform() {
@@ -19,9 +19,9 @@ module platform() {
           translate([0, 45, 0]) cylinder(r=5, h=h, center=true);
         }
       }
-      cylinder(r=30, h=h, center=true, $fn=12);
+      cylinder(r=30, h=h, center=true);
     }
-    cylinder(r=20, h=h+12, center=true, $fn=12);
+    cylinder(r=20, h=h+12, center=true);
     for (a = [0:2]) {
       rotate(a*120) {
         translate([0, -25, 0])
