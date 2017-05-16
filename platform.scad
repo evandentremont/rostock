@@ -24,8 +24,9 @@ module platform() {
     cylinder(r=20, h=h+12, center=true);
     for (a = [0:2]) {
       rotate(a*120) {
-        translate([0, -25, 0])
-          cylinder(r=2.2, h=h+1, center=true, $fn=12);
+        // Extruder mount holes
+          //  translate([0, -25, 0])
+         // #cylinder(r=2.2, h=h+1, center=true, $fn=12);
         // Screw holes for adjustable bottom endstops.
         translate([0, 45, 0])
           cylinder(r=1.5, h=h+1, center=true, $fn=12);

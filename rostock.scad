@@ -6,6 +6,7 @@ use <motor_end.scad>;
 use <idler_end.scad>;
 use <carriage.scad>;
 use <platform.scad>;
+use <customplatform.scad>;
 use <rod.scad>;
 
 aluminum = [0.9, 0.9, 0.9];
@@ -68,7 +69,7 @@ module tower(height)
 module rod_pair(lean_y,lean_x)
 {
 	for(i=[-1,1])
-	translate([25*i,platform_hinge_offset,0])
+	translate([41*i,platform_hinge_offset,0])
 	rotate([lean_x,0,0])
 	rotate([0,lean_y,0])
 	rotate([0, -90, 0]) 
@@ -103,7 +104,7 @@ module rostock()
 	translate(platformxyz) 
 	translate([0, 0, motor_end_height+bed_thickness+pcb_thickness]) 
 	rotate([0, 0, 60]) 
-	if (use_stls) import ("platform.stl"); else platform();
+	if (use_stls) import ("platform.stl"); else rotate([0,0,-90]) custom_platform();
 
 	% translate([0, 0, motor_end_height+bed_thickness/2])
 	cylinder(r=(tower_radius-8/2)/cos(30), h=bed_thickness, center=true, $fn=6);
