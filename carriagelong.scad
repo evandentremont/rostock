@@ -21,22 +21,29 @@ module parallel_joints(reinforced) {
       }
       translate([0, 8, 0]) cube([width, 16, 8], center=true);
     }
-    rotate([0, 90, 0]) cylinder(r=1.55, h=80, center=true, $fn=12);
+    // bolt hole
+    rotate([0, 90, 0]) cylinder(r=1.5, h=80, center=true, $fn=24);
 
     for (x = [-offset, offset]) {
-      translate([x, 5.5, 0])
-        cylinder(r=cutout/2, h=100, center=true, $fn=24);
-      translate([x, -4.5, 0])
-        cube([cutout, 20, 100], center=true);
-      translate([0, 0, 0]) rotate([0, 90, 0]) rotate([0, 0, 30])
-         cylinder(r=3.3, h=offset + 2, center=true, $fn=6);
+        //arm cut
+        translate([x, 5.5, 0])
+          cylinder(r=cutout/2, h=100, center=true, $fn=24);
+        translate([x, -4.5, 0])
+          cube([cutout, 20, 100], center=true);
+        
+         // nut cutout
+        translate([x*1.18, 0, 0]) rotate([0, 90, 0]) rotate([0, 0, 30])
+        cylinder(r=3.3, h=2, center=true, $fn=6);
        
      }
-    translate([0, 2, 0]) cylinder(r=middle, h=100, center=true);
-    translate([0, -8, 0]) cube([2*middle, 20, 100], center=true);
+     // center cut
+    //translate([0, 2, 0]) cylinder(r=middle, h=100, center=true);
+    translate([0, -8, 0]) {
+        cube([2*middle+26, 35, 100], center=true);
+        
+    }
   }
 }
-
 module lm8uu_mount(d, h) {
   union() {
     difference() {
