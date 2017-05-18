@@ -10,7 +10,7 @@ use <platform.scad>
 detaillevel = 0;
 
 // The actual head is shorter for some reason..
-//translate([0,0,55]) rotate([0,180,210]) #print_part();
+translate([0,0,55]) rotate([0,180,210]) #print_part();
 
 
     diameter = 22.3;
@@ -348,7 +348,7 @@ rotate([0,0,120]){
     
                 translate([0, 25, 21])  cube([8, 8, 42], center=true);
                
-                translate([0,32,2.25]) cube([8, 7.5,4.5], center=true);
+                translate([0,31.5,2.25]) cube([fan_size, 10.5,4.5], center=true);
          
                
                 translate([4,21,2.25]) rotate([fan_angle,0,90])cube([8, 30,8]);
