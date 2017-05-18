@@ -9,20 +9,23 @@ use <platform.scad>
 
 detaillevel = 0;
 
-//translate([0,0,63]) rotate([0,180,90]) #print_part();
+// The actual head is shorter for some reason..
+//translate([0,0,55]) rotate([0,180,210]) #print_part();
 
 
     diameter = 22.3;
     
     
     
-    fan_xpos = 39;
+    fan_xpos = 32;
     fan_ypos = 0;
-    fan_zpos = 7;
-    fan_angle = 60;
-    fan_size = 50;
+    fan_zpos = -2.5;
+    fan_angle = 75;
+    fan_size = 30;
     
-    cooler_height = -19;
+    cooler_height = -22;
+    
+    heatsink_height = 22;
 
 //TODO: Make this more modular
 module fan_mount(size){
@@ -59,8 +62,8 @@ module e3d_v6_heatsink(){
     
     difference(){
         
-        cube([diameter+1, diameter+1, 26], center=true);
-        
+        //cube([diameter+20, diameter+19, 26], center=true);
+        cylinder(h=26, r=(diameter+21)/2, center=true);
         //Heatsink cut
         cylinder(r=(diameter / 2), h=(26.5), center = true);
         translate([-(diameter/2), 0,0]) cube([diameter, diameter, 26.5], center=true);
@@ -83,18 +86,16 @@ module heatsink_airflow(size){
         //Outer Shell
         hull(){
                        translate([fan_xpos, fan_ypos, fan_zpos]) rotate([0,fan_angle,0])
-                       difference(){
+              
                             cylinder(r=(size/2)-2, h=1.5, center=true);
                            
-                            translate([size/4,0,0]) cube([size/2,size,10], center=true);
-                       }
-                       
-                       translate([(diameter/2)+0.5, 0,9]) 
+                         
+                       translate([(diameter/2)+0.5, 0,1]) 
                             cube([0.1, diameter+1,26.0], center=true);
            }
            
            // Inner Shell
-         airflow(size);
+         heatsink_air(size);
            
            // Heatsink
            cylinder(r=(diameter / 2), h=(26.5), center = true);
@@ -106,64 +107,182 @@ module heatsink_airflow(size){
 
 
 
-
-
-module airflow(size){
-   // heatsink 
+module heatsink_air(size){
+       // heatsink 
       hull(){
                    translate([fan_xpos, fan_ypos, fan_zpos]) rotate([0,fan_angle,0])  
-                   difference(){
+               
                         cylinder(r=(size/2)-2-1, h=1.6, center=true);
-                        translate([(size/4)-0.25,0,0]) cube([size/2,size,10], center=true);
-                   }
-                   
-                   translate([(diameter/2), 0,9]) 
+                        
+                   translate([(diameter/2), 1,]) 
                         cube([0.15, (diameter-4)-0.5, 26.5-4-2], center=true);
            }
+           
+       }
+
+module printcool_air(size){
+
            
            
        // cooler
            hull(){
                    translate([fan_xpos, fan_ypos, fan_zpos]) rotate([0,fan_angle,0])  
-                   difference(){
+              
                         cylinder(r=(size/2)-2-1, h=1.6, center=true);
-                        translate([(-size/4)+0.25,0,0]) cube([size/2,size,10], center=true);
-                   }
+                       
                    
-                   translate([10, 0,cooler_height ]) 
-                        rotate([0,-60,0])  cube([1.5, 11, 5], center=true);
+                   translate([15, 0,cooler_height ]) 
+                        rotate([0,-90,0])  cube([1.5, 11, 5], center=true);
            }
 }
 
 
+module ring(){
+difference(){
+    
+   
+translate([0,0,4])  rotate_extrude()
+translate([20, 0, 0])
+circle(r = 4);
+    
+ring_air();
+    
+}
+}
 
-module printcool_airflow(size){
-    diameter = 22.3;
+module ring_air(){
+        translate([0,0,4])  rotate_extrude()
+translate([20, 0, 0])
+circle(r = 2.5);
     
+    cooler_steps = 16;
     
-         // Main fan hole
-    difference(){
+    for(i=[0:cooler_steps]){
+    
+    rotate([90,0,i*(360/cooler_steps)]) translate([18,1,0])rotate([0,0,0]) cube([1,7,5],center=true);
+    
+    }
+
+}
+    
+elbow_height = 17;
+
+module printcool_air240 (){
+    hull(){
+     rotate([0,0,240])  translate([fan_xpos, fan_ypos, fan_zpos+21])  rotate([0,fan_angle,0]) cylinder(r=(fan_size/2)-2, h=5, center=true);
         
-        //Outer Shell
-        hull(){
-                       translate([fan_xpos, fan_ypos, fan_zpos]) rotate([0,fan_angle,0])
-                       difference(){
-                            cylinder(r=(size/2)-2, h=1.5, center=true);
-                            translate([-size/4,0,0]) cube([size/2,size,10], center=true);
-                       }
-                       
-                       translate([10, 0,cooler_height]) 
-                            rotate([0,-60,0])  cube([1, 12, 6], center=true);
-           }
-           
-        airflow(size);
-           
-           // Heatsink
-           cylinder(r=(diameter / 2), h=(26.5), center = true);
-           
-           
+         translate([0,-20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+         translate([5,-20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);         
+        translate([-5,-20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+    }
+
+    hull(){
+         translate([0,-20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+         translate([5,-20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);         
+        translate([-5,-20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+        
+         translate([0,-20,4])rotate([0,0,0])sphere(r=2, h=5, center=true);
+         translate([5,-20,4])rotate([0,0,0])sphere(r=2, h=5, center=true);         
+        translate([-5,-20,4])rotate([0,0,0])sphere(r=2, h=5, center=true);  }
+
+}
+
+
+module printcool_air120 (){
+    hull(){
+     rotate([0,0,120])  translate([fan_xpos, fan_ypos, fan_zpos+20])  rotate([0,fan_angle,0]) cylinder(r=(fan_size/2)-2, h=5, center=true);
+    translate([0,20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+        
+            translate([5,20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+        
+            translate([-5,20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+    }
+
+    hull(){
+    translate([0,20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+        
+            translate([5,20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+        
+            translate([-5,20,elbow_height])rotate([0,0,0])sphere(r=2, h=5, center=true);
+
+    translate([0,20,4])rotate([0,0,0])sphere(r=2, h=5, center=true);
+        
+            translate([5,20,4])rotate([0,0,0])sphere(r=2, h=5, center=true);
+        
+            translate([-5,20,4])rotate([0,0,0])sphere(r=2, h=5, center=true);
+        
     }
 }
+
+
+
+module printcool_airflow240 (){
+    
+    difference(){
+        union(){
+            hull(){
+             rotate([0,0,240])  translate([fan_xpos, fan_ypos, fan_zpos+20])  rotate([0,fan_angle,0]) cylinder(r=(fan_size/2), h=2.5, center=true);
+                
+                //yikes...
+                 translate([0,-20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+                            translate([-5,-20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+                            translate([5,-20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+
+            }
+
+            hull(){
+   
+                                 translate([0,-20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+                            translate([-5,-20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+                            translate([5,-20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+
+
+                 translate([0,-20,4])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+                            translate([-5,-20,4])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+                            translate([5,-20,4])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+
+            }
+        }
+        printcool_air240();
+    }
+
+}
+
+
+
+module printcool_airflow120 (){
+    difference(){
+        union(){
+            
+    hull(){
+     rotate([0,0,120])  translate([fan_xpos, fan_ypos, fan_zpos+20])  rotate([0,fan_angle,0]) cylinder(r=(fan_size/2), h=2.5, center=true);
+        
+    translate([0,20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+            translate([-5,20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+            translate([5,20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+    }
+
+    hull(){
+
+
+    translate([0,20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+            translate([-5,20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+            translate([5,20,elbow_height])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+        
+        
+    translate([0,20,4])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+            translate([-5,20,4])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+            translate([5,20,4])rotate([0,0,0])sphere(r=3.75, h=5, center=true);
+    }
+    
+            }
+        printcool_air120();
+    }
+    
+}
+
+
+
 
 
 
@@ -172,16 +291,6 @@ module custom_platform(){
 
 // make this come around the head a bit, possibly dyson airblade style
 // Need to make the airflow modular so it can be pulled out of the carriage as well.
- translate([0,0,21]) printcool_airflow(fan_size);
- translate([0,0,21]) heatsink_airflow(fan_size);
-translate([0,0,30]) e3d_v6_heatsink();
-translate([0,0,21]) fan_mount(fan_size);
-
-
-
-
-
-
 
 
 
@@ -193,44 +302,108 @@ h=8;
 
 difference(){
     union(){
+        ring();
+        printcool_airflow240 ();
+printcool_airflow120 ();
+
+
 rotate([0,0,90]) platform();
+        
+        
+        
+rotate([0,0,240]){
+    translate([0,0,21]) fan_mount(fan_size);
+
+}
+
+
+rotate([0,0,120]){
+    translate([0,0,21]) fan_mount(fan_size);
+}
+rotate([0,0,0]){
+    translate([0,0,21]) fan_mount(fan_size);
+    translate([0,0,21]) heatsink_airflow(fan_size);
+    translate([0,0,heatsink_height]) e3d_v6_heatsink();
+}
 
 
 
 
-// Top ring
-translate([0,0,46]) rotate([0,0,90]) difference(){
+
+
+
+// ring
+
+
+translate([0,0,12]) rotate([0,0,90]) difference(){
    cylinder(r=27, h=h, center=true);
    cylinder(r=23, h=(h)+1, center=true);
 }
-        
-    
+
+   
 //Pillars
-rotate([0,0,180]){
+rotate([0,0,120]){
       for (a = [-90:120:269]) {
         rotate([0, 0, a]) {
     
-                translate([0, 25, 0]) rotate([0,0,30])cylinder(r=5, h=50);
+                translate([0, 25, 21])  cube([8, 8, 42], center=true);
                
-          
+                translate([0,32,2.25]) cube([8, 7.5,4.5], center=true);
+         
+               
+                translate([4,21,2.25]) rotate([fan_angle,0,90])cube([8, 30,8]);
+                translate([-4,29,2.25]) rotate([fan_angle,0,270])cube([8, 30,8]);
       }
+       
       }
+      
+ 
+
+  }
+  
+
 
   }
 
+difference(){
+    union(){
+                      printcool_air240();
+       printcool_air120();
+        ring_air();
+        
+        rotate([0,0,0]){
+            translate([0,0,21]) heatsink_air(fan_size);
+        }
+    }
+    
 
-  }
-
-translate([0,0,21]) airflow(fan_size);
-  
-  
-  
-  rotate([0,0,180]){
+    // posts through the fan holes. 
+      rotate([0,0,120]){
       for (a = [-90:120:269]) {
         rotate([0, 0, a]) {
-                // These need sized so theyre tappable.
+                // These may need sized so theyre tappable.
+            hull(){
+            //        translate([0,22,15]) cylinder(r=0.5, h=80, $fn= 20, center=true);
+                    translate([0,25,15]) cylinder(r=2, h=80, $fn= 20, center=true);
+               //     translate([0,27,15]) cylinder(r=1.5, h=80, $fn= 20, center=true);
+      }
+      }
+      }
+
+  }
+  
+}
+
+
+ 
+  
+  rotate([0,0,120]){
+      for (a = [-90:120:269]) {
+        rotate([0, 0, a]) {
+                // These may need sized so theyre tappable.
                 translate([0,25,15]) cylinder(r=1.5, h=80, $fn= 20, center=true);
-          
+            // countersink on bottom
+            translate([0,25,0]) cylinder(r=3, h=4, $fn= 20, center=true);
       }
       }
 
